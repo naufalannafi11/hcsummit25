@@ -4,8 +4,8 @@ use App\Models\Post;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminController;
+// use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Http\Request;
 
 // Route Home
@@ -20,7 +20,9 @@ Route::get('/posts', function () {
 
 Route::get('/posts/{slug}', function ($slug) {
     // Cari post berdasarkan slug, bukan ID
-    $post = Post::where('slug', $slug)->firstOrFail();
+    $post = Arr::first(Post::all(), function ($post) use ($slug) {
+        return $post['slug'] == $slug;
+    });
 
     return view('post', ['title' => 'Single Post', 'post' => $post]);
 });
@@ -46,8 +48,9 @@ Route::get('/register', [RegisterController::class, 'index'])->name('register.in
 Route::post('/submit', [RegisterController::class, 'store'])->name('register.store');
 
 // Route Admin Login, Logout
-Route::get('admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'authenticate'])->name('admin.authenticate');
+Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users')->middleware('auth'); // Halaman untuk menampilkan data pengguna
 
 
 // // Route Admin Dashboard with Middleware

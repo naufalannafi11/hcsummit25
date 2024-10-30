@@ -13,7 +13,7 @@
               <x-nav-link href="/schedule" :active="request()->is('schedule')">Schedule</x-nav-link>
               <x-nav-link href="/contact" :active="request()->is('contact')">Contact Us</x-nav-link>
               <x-nav-link href="/roadToHC" :active="request()->is('roadToHC')">Road To HC </x-nav-link>
-              <x-nav-link href="/admin.login" :active="request()->is('roadToHC')">Login Admin </x-nav-link>
+              <x-nav-link href="{{ route('admin.login') }}" :active="request()->is('admin.login')">Login Admin </x-nav-link>
               
             </div>
           </div>
@@ -46,7 +46,7 @@
               <x-nav-link href="/schedule" :active="request()->is('schedule')">Schedule</x-nav-link>
               <x-nav-link href="/contact" :active="request()->is('contact')">Contact Us</x-nav-link>
               <x-nav-link href="/roadToHC" :active="request()->is('roadToHC')">Road To HC </x-nav-link>
-              <x-nav-link href="/login" :active="request()->is('roadToHC')">Login Admin </x-nav-link>
+              <x-nav-link href="{{ route('admin.login') }}" :active="request()->is('roadToHC')">Login Admin </x-nav-link>
             </div>
       </div>
     </div>

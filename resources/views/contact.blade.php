@@ -20,7 +20,7 @@
                     <p class="font-bold mt-7">Vanue</p>
                     <p>Gedung Widjajono Partowidagdo BPSDM ESDM</p>
                     <p>Address : Jl. Gatot Subroto No. Kav. 49 Jakarta Selatan</p>
-                    <h2 class="font-bold text-xl underline underline-offset-8 mt-7">CONTACT US</h2>
+                    <h2 class="font-bold text-xl underline underline-offset-8 mt-7">CONTACT US</h2> 
                         
                     <div class="mb-4 mt-2">
                         <p class="font-bold">+62 815 4282 6162</p>
