@@ -29,9 +29,15 @@ class AdminController extends Controller
         ]);
     }
 
-    public function index()
+    public function showUsers()
     {
-        $users = User::all(); // Ambil semua pengguna
-        return view('admin.users', compact('users'));
+        $users = User::all(); // Mengambil semua data dari tabel users
+
+        return view('admin.users', ['users' => $users, 'title' => 'Daftar Pengguna']);
     }
+    // public function index()
+    // {
+    //     $users = User::all(); // Ambil semua pengguna
+    //     return view('admin.users', compact('users'));
+    // }
 }

@@ -5,7 +5,6 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminController;
-// use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Http\Request;
 
 // Route Home
@@ -29,7 +28,7 @@ Route::get('/posts/{slug}', function ($slug) {
 
 // Route Schedule
 Route::get('/schedule', function () {
-    $schedule = []; // Placeholder untuk data jadwal
+    $schedule = []; 
     return view('schedule', ['schedule' => $schedule]);
 });
 
@@ -46,6 +45,11 @@ Route::get('/roadToHC', function () {
 // Route Register
 Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
 Route::post('/submit', [RegisterController::class, 'store'])->name('register.store');
+
+Route::get('/emails/otp', [RegisterController::class, 'showVerifyOtpForm'])->name('register.verifyOtpForm');
+
+// Route untuk memverifikasi OTP yang diinput pengguna
+Route::post('/emails/otp', [RegisterController::class, 'verifyOtp'])->name('register.verifyOtp');
 
 // Route Admin Login, Logout
 Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
