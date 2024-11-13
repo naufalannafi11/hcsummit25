@@ -1,29 +1,46 @@
 <x-layout>
-    <main class="flex justify-center items-center w-full min-h-screen bg-green-900 rounded-md shadow-xl text-white">
-        <section class="w-full max-w-md mx-6 flex flex-col space-y-8">
-            <h1 class="bg-yellow-600 py-3 text-2xl font-medium text-center rounded-tl-2xl rounded-br-2xl">Admin Login</h1>
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="w-full max-w-md bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Admin Login</h2>
             
-            <form action="{{ route('admin.authenticate') }}" method="POST" class="flex flex-col space-y-6">
+            @if ($errors->any())
+                <div class="text-red-600 text-sm mb-4 text-center">
+                    {{ $errors->first('email') }}
+                </div>
+            @endif
+            
+            <form action="{{ route('admin.login') }}" method="POST" class="space-y-6" autocomplete="off"> 
                 @csrf
                 
                 <div>
-                    <label for="email" class="block text-white mb-1">Email:</label>
-                    <input type="email" name="email" id="email" required class="w-full bg-transparent border-b-2 border-white text-white focus:outline-none focus:border-yellow-500" placeholder="Enter your email" autocomplete="off">
-                    @error('email')
-                        <small class="text-red-500">{{ $message }}</small>
-                    @enderror
+                    <label for="email" class="block text-gray-700 font-semibold mb-1">Email:</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="email" 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" 
+                        required
+                    >
                 </div>
-
+                
                 <div>
-                    <label for="password" class="block text-white mb-1">Password:</label>
-                    <input type="password" name="password" id="password" required class="w-full bg-transparent border-b-2 border-white text-white focus:outline-none focus:border-yellow-500" placeholder="Enter your password">
-                    @error('password')
-                        <small class="text-red-500">{{ $message }}</small>
-                    @enderror
+                    <label for="password" class="block text-gray-700 font-semibold mb-1">Password:</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" 
+                        required
+                    >
                 </div>
-
-                <button type="submit" class="bg-yellow-600 text-white py-2 rounded hover:bg-yellow-500 transition duration-200">Login</button>
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-300"
+                >
+                    Login
+                </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
 </x-layout>

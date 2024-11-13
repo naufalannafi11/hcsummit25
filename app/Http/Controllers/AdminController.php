@@ -8,36 +8,59 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
-    public function login()
+    // Menampilkan form login untuk admin
+    public function showLoginForm()
     {
-        return view('admin.login');
+        return view('admin.login'); // Pastikan ada view login di resources/views/admin/login.blade.php
     }
 
-    public function authenticate(Request $request)
+    // Proses autentikasi admin
+    public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        // Validasi input dari form login
+        // $request->validate([
+        //     'email' => 'required|email',
+        //     'password' => 'required',
+        // ]);
+
+        // // Cek apakah admin bisa login menggunakan email dan password yang diberikan
+        // if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        //     // Jika berhasil login, redirect ke halaman daftar pengguna
+        //     return redirect()->route('admin.users');
+        // }
+
+        // // Jika gagal, kembalikan ke halaman login dengan pesan error
+        // return back()->withErrors([
+        //     'email' => 'The provided credentials do not match our records.',
+        // ]);
+        $credentials = $request->only('email', 'password');
         
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->route('admin.users'); // Redirect ke halaman pengguna setelah login berhasil
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Email atau password salah.',
         ]);
     }
 
-    public function showUsers()
-    {
-        $users = User::all(); // Mengambil semua data dari tabel users
-
-        return view('admin.users', ['users' => $users, 'title' => 'Daftar Pengguna']);
-    }
-    // public function index()
+    // Menampilkan daftar pengguna setelah login berhasil
+    public function dashboard()
     // {
-    //     $users = User::all(); // Ambil semua pengguna
-    //     return view('admin.users', compact('users'));
+    //     // Ambil semua data pengguna dari database
+    //     $users = User::all(); 
+
+    //     // Tampilkan halaman admin.users dengan data pengguna
+    //     return view('admin.users', ['users' => $users, 'title' => 'Daftar Pengguna']);
     // }
+
+    // // Menampilkan halaman dashboard admin setelah login
+    // public function dashboard()
+    // {
+    //     return view('admin.dashboard'); // Tampilkan halaman dashboard admin
+    // }
+    {
+        $users = User::all(); // Mengambil semua data user
+        return view('admin.dashboard', compact('users'));
+    }
 }

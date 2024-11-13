@@ -30,7 +30,7 @@ class RegisterController extends Controller
         // Generate OTP
         $otp = Str::random(6);
 
-        // Simpan data di session untuk sementara
+        // Simpan data registrasi dan OTP di session untuk sementara
         session([
             'registration_data' => $request->only('name', 'email', 'password', 'agency', 'participation'),
             'otp' => $otp,
@@ -40,24 +40,31 @@ class RegisterController extends Controller
         // Kirim OTP ke email
         Mail::to($request->email)->send(new OtpMail($otp));
 
-        return redirect()->route('/emails/otp')->with('success', 'OTP telah dikirim ke email Anda.');
+        return redirect()->route('register.verifyOtpForm')->with('success', 'OTP telah dikirim ke email Anda.');
     }
 
+    // Menampilkan halaman verifikasi OTP
     public function showVerifyOtpForm()
     {
-        return view('emails.otp');
+        $otp = session('otp'); 
+        return view('verifyOtp', compact('otp')); 
     }
 
     public function verifyOtp(Request $request)
     {
-        // Ambil data OTP dari session
+        // Validasi input OTP
+        $request->validate([
+            'otp' => 'required|string',
+        ]);
+
+        // Ambil data OTP, masa berlaku, dan data registrasi dari session
         $otp = session('otp');
         $otpExpiresAt = session('otp_expires_at');
         $registrationData = session('registration_data');
 
-        // Cek apakah OTP masih valid
+        // Cek apakah OTP valid dan belum kedaluwarsa
         if ($otp && $otpExpiresAt && now()->lessThanOrEqualTo($otpExpiresAt) && $otp === $request->otp) {
-            // Jika OTP valid, simpan data ke database
+            // Simpan data ke database jika OTP valid
             User::create([
                 'name' => $registrationData['name'],
                 'email' => $registrationData['email'],
@@ -66,12 +73,14 @@ class RegisterController extends Controller
                 'participation' => json_encode($registrationData['participation']),
             ]);
 
-            // Hapus data dari session
+            // Hapus data OTP dan session
             session()->forget(['otp', 'otp_expires_at', 'registration_data']);
 
+            // Redirect ke halaman home dengan pesan sukses
             return redirect()->route('home')->with('success', 'Registrasi berhasil.');
         }
 
+        // Jika OTP salah atau sudah kadaluwarsa
         return back()->withErrors(['otp' => 'OTP tidak valid atau telah kedaluwarsa.']);
     }
 }
